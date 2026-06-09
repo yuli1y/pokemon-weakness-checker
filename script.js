@@ -196,7 +196,6 @@ const pokemonSprite = document.querySelector("#pokemonSprite");
 const dexNumber = document.querySelector("#dexNumber");
 const pokemonName = document.querySelector("#pokemonName");
 const typeList = document.querySelector("#typeList");
-const quadWeaknessList = document.querySelector("#quadWeaknessList");
 const weaknessList = document.querySelector("#weaknessList");
 const resistanceList = document.querySelector("#resistanceList");
 const immuneList = document.querySelector("#immuneList");
@@ -440,7 +439,7 @@ async function calculateMatchup(typeNames) {
   return {
     defense: {
       quadWeakness: pickTypes(defensiveMultipliers, (value) => value >= 4),
-      weakness: pickTypes(defensiveMultipliers, (value) => value > 1 && value < 4),
+      weakness: pickTypes(defensiveMultipliers, (value) => value > 1),
       resistance: pickTypes(defensiveMultipliers, (value) => value > 0 && value < 1),
       immune: pickTypes(defensiveMultipliers, (value) => value === 0),
     },
@@ -494,8 +493,11 @@ function renderPokemon(pokemon, species, typeNames, matchup) {
   pokemonName.textContent = displayName;
 
   renderTypeChips(typeList, typeNames);
-  renderTypeChips(quadWeaknessList, matchup.defense.quadWeakness, "4倍弱点なし");
-  renderTypeChips(weaknessList, matchup.defense.weakness, "弱点なし");
+  renderTypeChips(weaknessList, matchup.defense.weakness, "弱点なし", {
+    markers: Object.fromEntries(
+      matchup.defense.quadWeakness.map((typeName) => [typeName, "4x"])
+    ),
+  });
   renderTypeChips(resistanceList, matchup.defense.resistance, "耐性なし");
   renderTypeChips(immuneList, matchup.defense.immune, "無効なし");
   renderTypeChips(attackStrongList, matchup.offense.strong, "該当なし");
@@ -503,7 +505,7 @@ function renderPokemon(pokemon, species, typeNames, matchup) {
   renderTypeChips(attackNoEffectList, matchup.offense.noEffect, "該当なし");
 }
 
-function renderTypeChips(container, typeNames, emptyLabel = "") {
+function renderTypeChips(container, typeNames, emptyLabel = "", options = {}) {
   container.replaceChildren();
 
   if (typeNames.length === 0 && emptyLabel) {
@@ -516,8 +518,21 @@ function renderTypeChips(container, typeNames, emptyLabel = "") {
 
   typeNames.forEach((typeName) => {
     const chip = document.createElement("span");
+    const marker = options.markers?.[typeName];
     chip.className = `type-pill ${typeName}`;
-    chip.textContent = typeLabels[typeName] ?? typeName;
+
+    if (marker) {
+      const label = document.createElement("span");
+      const markerText = document.createElement("span");
+      chip.classList.add("marked");
+      label.textContent = typeLabels[typeName] ?? typeName;
+      markerText.className = "type-marker";
+      markerText.textContent = marker;
+      chip.append(label, markerText);
+    } else {
+      chip.textContent = typeLabels[typeName] ?? typeName;
+    }
+
     container.append(chip);
   });
 }
