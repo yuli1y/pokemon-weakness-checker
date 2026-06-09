@@ -200,12 +200,59 @@ const weaknessList = document.querySelector("#weaknessList");
 const resistanceList = document.querySelector("#resistanceList");
 const immuneList = document.querySelector("#immuneList");
 const submitButton = form.querySelector("button");
+const suggestionList = document.querySelector("#suggestionList");
 
 const typeCache = new Map();
+const japaneseNameEntries = Object.entries(nameLookup)
+  .map(([name, identifier]) => ({ name, identifier }))
+  .sort((a, b) => a.name.localeCompare(b.name, "ja"));
+let activeSuggestionIndex = -1;
+let currentSuggestions = [];
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
+  hideSuggestions();
   await searchPokemon(input.value);
+});
+
+input.addEventListener("input", () => {
+  updateSuggestions(input.value);
+});
+
+input.addEventListener("focus", () => {
+  updateSuggestions(input.value);
+});
+
+input.addEventListener("keydown", (event) => {
+  if (suggestionList.classList.contains("hidden")) {
+    return;
+  }
+
+  if (event.key === "ArrowDown") {
+    event.preventDefault();
+    moveActiveSuggestion(1);
+  }
+
+  if (event.key === "ArrowUp") {
+    event.preventDefault();
+    moveActiveSuggestion(-1);
+  }
+
+  if (event.key === "Enter" && activeSuggestionIndex >= 0) {
+    event.preventDefault();
+    selectSuggestion(currentSuggestions[activeSuggestionIndex]);
+    form.requestSubmit();
+  }
+
+  if (event.key === "Escape") {
+    hideSuggestions();
+  }
+});
+
+document.addEventListener("click", (event) => {
+  if (!form.contains(event.target)) {
+    hideSuggestions();
+  }
 });
 
 async function searchPokemon(rawKeyword) {
@@ -258,8 +305,99 @@ function normalizeKeyword(value) {
 
 function normalizeJapaneseName(value) {
   return value
+    .normalize("NFKC")
     .replace(/\s+/g, "")
     .replace(/[ぁ-ゖ]/g, (char) => String.fromCharCode(char.charCodeAt(0) + 0x60));
+}
+
+function updateSuggestions(value) {
+  const query = normalizeJapaneseName(value);
+
+  if (query.length < 1 || /^[0-9]+$/.test(query)) {
+    hideSuggestions();
+    return;
+  }
+
+  const startsWithMatches = [];
+  const includesMatches = [];
+
+  japaneseNameEntries.forEach((entry) => {
+    if (entry.name.startsWith(query)) {
+      startsWithMatches.push(entry);
+      return;
+    }
+
+    if (entry.name.includes(query)) {
+      includesMatches.push(entry);
+    }
+  });
+
+  currentSuggestions = [...startsWithMatches, ...includesMatches].slice(0, 8);
+  activeSuggestionIndex = -1;
+  renderSuggestions();
+}
+
+function renderSuggestions() {
+  suggestionList.replaceChildren();
+
+  if (currentSuggestions.length === 0) {
+    hideSuggestions();
+    return;
+  }
+
+  currentSuggestions.forEach((suggestion, index) => {
+    const option = document.createElement("button");
+    option.type = "button";
+    option.className = "suggestion-option";
+    option.role = "option";
+    option.id = `suggestion-${index}`;
+    option.dataset.index = String(index);
+    const nameText = document.createElement("span");
+    const identifierText = document.createElement("span");
+    nameText.textContent = suggestion.name;
+    identifierText.className = "suggestion-number";
+    identifierText.textContent = suggestion.identifier;
+    option.append(nameText, identifierText);
+    option.addEventListener("mousedown", (event) => {
+      event.preventDefault();
+      selectSuggestion(suggestion);
+    });
+    option.addEventListener("click", () => {
+      form.requestSubmit();
+    });
+    suggestionList.append(option);
+  });
+
+  suggestionList.classList.remove("hidden");
+  input.setAttribute("aria-expanded", "true");
+}
+
+function moveActiveSuggestion(direction) {
+  activeSuggestionIndex =
+    (activeSuggestionIndex + direction + currentSuggestions.length) %
+    currentSuggestions.length;
+
+  [...suggestionList.children].forEach((option, index) => {
+    const isActive = index === activeSuggestionIndex;
+    option.classList.toggle("active", isActive);
+    option.setAttribute("aria-selected", String(isActive));
+  });
+
+  input.setAttribute("aria-activedescendant", `suggestion-${activeSuggestionIndex}`);
+}
+
+function selectSuggestion(suggestion) {
+  input.value = suggestion.name;
+  hideSuggestions();
+}
+
+function hideSuggestions() {
+  currentSuggestions = [];
+  activeSuggestionIndex = -1;
+  suggestionList.classList.add("hidden");
+  suggestionList.replaceChildren();
+  input.setAttribute("aria-expanded", "false");
+  input.removeAttribute("aria-activedescendant");
 }
 
 async function calculateMatchup(typeNames) {

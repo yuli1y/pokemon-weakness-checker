@@ -125,9 +125,16 @@ label {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 10px;
+  align-items: start;
+}
+
+.suggest-field {
+  position: relative;
+  min-width: 0;
 }
 
 input {
+  width: 100%;
   min-width: 0;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -140,6 +147,46 @@ input {
 input:focus {
   border-color: var(--focus);
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.13);
+}
+
+.suggestion-list {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 18px 45px rgba(38, 45, 58, 0.16);
+  padding: 6px;
+}
+
+.suggestion-option {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  border: 0;
+  border-radius: 6px;
+  padding: 9px 10px;
+  color: var(--ink);
+  background: transparent;
+  font-weight: 750;
+  text-align: left;
+}
+
+.suggestion-option:hover,
+.suggestion-option.active {
+  background: #f1f5f9;
+}
+
+.suggestion-number {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
 }
 
 button {

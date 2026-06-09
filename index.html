@@ -25,14 +25,20 @@
         <form class="search-form" id="searchForm">
           <label for="pokemonInput">ポケモン名・英語名・図鑑番号</label>
           <div class="input-row">
-            <input
-              id="pokemonInput"
-              name="pokemon"
-              type="search"
-              autocomplete="off"
-              placeholder="例: ピカチュウ / pikachu / 25"
-              required
-            >
+            <div class="suggest-field">
+              <input
+                id="pokemonInput"
+                name="pokemon"
+                type="search"
+                autocomplete="off"
+                placeholder="例: ピカチュウ / pikachu / 25"
+                aria-autocomplete="list"
+                aria-controls="suggestionList"
+                aria-expanded="false"
+                required
+              >
+              <div class="suggestion-list hidden" id="suggestionList" role="listbox"></div>
+            </div>
             <button type="submit">調べる</button>
           </div>
         </form>
