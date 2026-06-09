@@ -196,10 +196,13 @@ const pokemonSprite = document.querySelector("#pokemonSprite");
 const dexNumber = document.querySelector("#dexNumber");
 const pokemonName = document.querySelector("#pokemonName");
 const typeList = document.querySelector("#typeList");
+const quadWeaknessList = document.querySelector("#quadWeaknessList");
 const weaknessList = document.querySelector("#weaknessList");
 const resistanceList = document.querySelector("#resistanceList");
 const immuneList = document.querySelector("#immuneList");
-const matchupSummary = document.querySelector("#matchupSummary");
+const attackStrongList = document.querySelector("#attackStrongList");
+const attackWeakList = document.querySelector("#attackWeakList");
+const attackNoEffectList = document.querySelector("#attackNoEffectList");
 const submitButton = form.querySelector("button");
 const suggestionList = document.querySelector("#suggestionList");
 
@@ -402,29 +405,57 @@ function hideSuggestions() {
 }
 
 async function calculateMatchup(typeNames) {
-  const multipliers = Object.fromEntries(
-    Object.keys(typeLabels).map((typeName) => [typeName, 1])
-  );
-
+  const defensiveMultipliers = createTypeMultiplierMap();
+  const offensiveMultipliers = createTypeMultiplierMap(0);
   const typeDetails = await Promise.all(typeNames.map(fetchType));
 
   typeDetails.forEach((typeDetail) => {
+    const attackMultipliers = createTypeMultiplierMap();
+
     typeDetail.damage_relations.double_damage_from.forEach(({ name }) => {
-      multipliers[name] *= 2;
+      defensiveMultipliers[name] *= 2;
     });
     typeDetail.damage_relations.half_damage_from.forEach(({ name }) => {
-      multipliers[name] *= 0.5;
+      defensiveMultipliers[name] *= 0.5;
     });
     typeDetail.damage_relations.no_damage_from.forEach(({ name }) => {
-      multipliers[name] *= 0;
+      defensiveMultipliers[name] *= 0;
+    });
+
+    typeDetail.damage_relations.double_damage_to.forEach(({ name }) => {
+      attackMultipliers[name] = 2;
+    });
+    typeDetail.damage_relations.half_damage_to.forEach(({ name }) => {
+      attackMultipliers[name] = 0.5;
+    });
+    typeDetail.damage_relations.no_damage_to.forEach(({ name }) => {
+      attackMultipliers[name] = 0;
+    });
+
+    Object.entries(attackMultipliers).forEach(([name, value]) => {
+      offensiveMultipliers[name] = Math.max(offensiveMultipliers[name], value);
     });
   });
 
   return {
-    weakness: pickTypes(multipliers, (value) => value > 1),
-    resistance: pickTypes(multipliers, (value) => value > 0 && value < 1),
-    immune: pickTypes(multipliers, (value) => value === 0),
+    defense: {
+      quadWeakness: pickTypes(defensiveMultipliers, (value) => value >= 4),
+      weakness: pickTypes(defensiveMultipliers, (value) => value > 1 && value < 4),
+      resistance: pickTypes(defensiveMultipliers, (value) => value > 0 && value < 1),
+      immune: pickTypes(defensiveMultipliers, (value) => value === 0),
+    },
+    offense: {
+      strong: pickTypes(offensiveMultipliers, (value) => value > 1),
+      weak: pickTypes(offensiveMultipliers, (value) => value > 0 && value < 1),
+      noEffect: pickTypes(offensiveMultipliers, (value) => value === 0),
+    },
   };
+}
+
+function createTypeMultiplierMap(initialValue = 1) {
+  return Object.fromEntries(
+    Object.keys(typeLabels).map((typeName) => [typeName, initialValue])
+  );
 }
 
 async function fetchType(typeName) {
@@ -463,33 +494,13 @@ function renderPokemon(pokemon, species, typeNames, matchup) {
   pokemonName.textContent = displayName;
 
   renderTypeChips(typeList, typeNames);
-  renderMatchupSummary(matchup);
-  renderTypeChips(weaknessList, matchup.weakness, "弱点なし");
-  renderTypeChips(resistanceList, matchup.resistance, "耐性なし");
-  renderTypeChips(immuneList, matchup.immune, "無効なし");
-}
-
-function renderMatchupSummary(matchup) {
-  const items = [
-    ["弱点", `${matchup.weakness.length}タイプ`],
-    ["耐性", `${matchup.resistance.length}タイプ`],
-    ["無効", `${matchup.immune.length}タイプ`],
-  ];
-
-  matchupSummary.replaceChildren(
-    ...items.map(([label, value]) => {
-      const item = document.createElement("div");
-      const labelText = document.createElement("span");
-      const valueText = document.createElement("span");
-      item.className = "summary-item";
-      labelText.className = "summary-label";
-      valueText.className = "summary-value";
-      labelText.textContent = label;
-      valueText.textContent = value;
-      item.append(labelText, valueText);
-      return item;
-    })
-  );
+  renderTypeChips(quadWeaknessList, matchup.defense.quadWeakness, "4倍弱点なし");
+  renderTypeChips(weaknessList, matchup.defense.weakness, "弱点なし");
+  renderTypeChips(resistanceList, matchup.defense.resistance, "耐性なし");
+  renderTypeChips(immuneList, matchup.defense.immune, "無効なし");
+  renderTypeChips(attackStrongList, matchup.offense.strong, "該当なし");
+  renderTypeChips(attackWeakList, matchup.offense.weak, "該当なし");
+  renderTypeChips(attackNoEffectList, matchup.offense.noEffect, "該当なし");
 }
 
 function renderTypeChips(container, typeNames, emptyLabel = "") {
