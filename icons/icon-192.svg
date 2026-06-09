@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="ポケモン弱点チェッカー">
+  <rect width="192" height="192" rx="42" fill="#f7f7f2"/>
+  <circle cx="96" cy="92" r="58" fill="#ffffff" stroke="#1f2933" stroke-width="10"/>
+  <path d="M38 92a58 58 0 0 1 116 0H38Z" fill="#dc2626"/>
+  <path d="M38 92h116" stroke="#1f2933" stroke-width="10"/>
+  <circle cx="96" cy="92" r="19" fill="#ffffff" stroke="#1f2933" stroke-width="8"/>
+  <path d="M62 151h68" stroke="#2563eb" stroke-width="10" stroke-linecap="round"/>
+  <path d="M96 130v32" stroke="#2563eb" stroke-width="10" stroke-linecap="round"/>
+</svg>
