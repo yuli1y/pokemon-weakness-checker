@@ -39,6 +39,7 @@ input {
   grid-template-columns: 0.95fr 1.05fr;
   gap: 22px;
   align-items: center;
+  align-content: center;
   padding: 18px 0;
 }
 
@@ -209,10 +210,13 @@ button:disabled {
 }
 
 .status-text {
-  min-height: 1.5em;
   margin: 14px 0 0;
   color: var(--muted);
   font-weight: 650;
+}
+
+.status-text:empty {
+  display: none;
 }
 
 .empty-state {
@@ -319,6 +323,35 @@ h3 {
   white-space: nowrap;
 }
 
+.matchup-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.summary-item {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #f8fafc;
+}
+
+.summary-label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.summary-value {
+  display: block;
+  margin-top: 3px;
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
 .matchup-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -362,8 +395,10 @@ h3 {
   .app-shell {
     grid-template-columns: 1fr;
     align-items: start;
-    gap: 14px;
+    align-content: start;
+    gap: 12px;
     padding: 10px 0;
+    min-height: auto;
   }
 
   .result-pane {
@@ -373,11 +408,16 @@ h3 {
 
 @media (max-width: 560px) {
   .app-shell {
-    width: min(100% - 20px, 1120px);
+    width: min(100% - 16px, 1120px);
+    gap: 10px;
   }
 
   .search-pane {
-    padding: 14px;
+    padding: 12px;
+  }
+
+  .result-pane {
+    padding: 12px;
   }
 
   .brand-row {
@@ -395,7 +435,7 @@ h3 {
   }
 
   .search-form {
-    margin-top: 14px;
+    margin-top: 12px;
   }
 
   .type-orbit {
@@ -416,15 +456,32 @@ h3 {
     font-size: clamp(1.55rem, 8vw, 2.1rem);
   }
 
+  .matchup-summary {
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .summary-item {
+    padding: 8px 9px;
+  }
+
+  .summary-label {
+    font-size: 0.72rem;
+  }
+
+  .summary-value {
+    font-size: 0.95rem;
+  }
+
   .matchup-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-    margin-top: 16px;
+    gap: 8px;
+    margin-top: 12px;
   }
 
   .matchup-grid section {
-    min-height: 90px;
-    padding: 10px;
+    min-height: 82px;
+    padding: 9px;
   }
 
   h3 {

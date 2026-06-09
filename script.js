@@ -199,6 +199,7 @@ const typeList = document.querySelector("#typeList");
 const weaknessList = document.querySelector("#weaknessList");
 const resistanceList = document.querySelector("#resistanceList");
 const immuneList = document.querySelector("#immuneList");
+const matchupSummary = document.querySelector("#matchupSummary");
 const submitButton = form.querySelector("button");
 const suggestionList = document.querySelector("#suggestionList");
 
@@ -462,9 +463,33 @@ function renderPokemon(pokemon, species, typeNames, matchup) {
   pokemonName.textContent = displayName;
 
   renderTypeChips(typeList, typeNames);
+  renderMatchupSummary(matchup);
   renderTypeChips(weaknessList, matchup.weakness, "弱点なし");
   renderTypeChips(resistanceList, matchup.resistance, "耐性なし");
   renderTypeChips(immuneList, matchup.immune, "無効なし");
+}
+
+function renderMatchupSummary(matchup) {
+  const items = [
+    ["弱点", `${matchup.weakness.length}タイプ`],
+    ["耐性", `${matchup.resistance.length}タイプ`],
+    ["無効", `${matchup.immune.length}タイプ`],
+  ];
+
+  matchupSummary.replaceChildren(
+    ...items.map(([label, value]) => {
+      const item = document.createElement("div");
+      const labelText = document.createElement("span");
+      const valueText = document.createElement("span");
+      item.className = "summary-item";
+      labelText.className = "summary-label";
+      valueText.className = "summary-value";
+      labelText.textContent = label;
+      valueText.textContent = value;
+      item.append(labelText, valueText);
+      return item;
+    })
+  );
 }
 
 function renderTypeChips(container, typeNames, emptyLabel = "") {
