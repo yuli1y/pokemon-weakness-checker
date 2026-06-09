@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ポケモン弱点チェッカー</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="search-pane" aria-labelledby="app-title">
+        <div class="brand-row">
+          <div class="pokeball-mark" aria-hidden="true">
+            <span></span>
+          </div>
+          <div>
+            <p class="eyebrow">Type Matchup Tool</p>
+            <h1 id="app-title">ポケモン弱点チェッカー</h1>
+          </div>
+        </div>
+
+        <form class="search-form" id="searchForm">
+          <label for="pokemonInput">ポケモン名・英語名・図鑑番号</label>
+          <div class="input-row">
+            <input
+              id="pokemonInput"
+              name="pokemon"
+              type="search"
+              autocomplete="off"
+              placeholder="例: ピカチュウ / pikachu / 25"
+              required
+            >
+            <button type="submit">調べる</button>
+          </div>
+        </form>
+
+        <div class="sample-row" aria-label="サンプル検索">
+          <button type="button" data-sample="ピカチュウ">ピカチュウ</button>
+          <button type="button" data-sample="リザードン">リザードン</button>
+          <button type="button" data-sample="フシギバナ">フシギバナ</button>
+          <button type="button" data-sample="ゲッコウガ">ゲッコウガ</button>
+        </div>
+
+        <p class="status-text" id="statusText" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="result-pane" aria-live="polite">
+        <div class="empty-state" id="emptyState">
+          <div class="type-orbit" aria-hidden="true">
+            <span class="type-pill electric">でんき</span>
+            <span class="type-pill ground">じめん</span>
+            <span class="type-pill water">みず</span>
+            <span class="type-pill grass">くさ</span>
+          </div>
+          <p>名前を入力すると、タイプと弱点が表示されます。</p>
+        </div>
+
+        <article class="pokemon-card hidden" id="pokemonCard">
+          <div class="pokemon-main">
+            <img id="pokemonSprite" alt="" width="160" height="160">
+            <div>
+              <p class="dex-number" id="dexNumber"></p>
+              <h2 id="pokemonName"></h2>
+              <div class="chip-row" id="typeList" aria-label="タイプ"></div>
+            </div>
+          </div>
+
+          <div class="matchup-grid">
+            <section>
+              <h3>弱点</h3>
+              <div class="chip-row large" id="weaknessList"></div>
+            </section>
+            <section>
+              <h3>耐性</h3>
+              <div class="chip-row large" id="resistanceList"></div>
+            </section>
+            <section>
+              <h3>無効</h3>
+              <div class="chip-row large" id="immuneList"></div>
+            </section>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
