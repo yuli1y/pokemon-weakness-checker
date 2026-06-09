@@ -182,6 +182,11 @@ const japaneseNameMap = {
   "ミライドン": "miraidon",
 };
 
+const nameLookup = {
+  ...(window.pokemonNameMap ?? {}),
+  ...japaneseNameMap,
+};
+
 const form = document.querySelector("#searchForm");
 const input = document.querySelector("#pokemonInput");
 const statusText = document.querySelector("#statusText");
@@ -235,8 +240,9 @@ async function searchPokemon(rawKeyword) {
 }
 
 function normalizeKeyword(value) {
-  const trimmed = value.trim();
-  const mapped = japaneseNameMap[trimmed];
+  const trimmed = value.trim().normalize("NFKC");
+  const japaneseKey = normalizeJapaneseName(trimmed);
+  const mapped = nameLookup[japaneseKey];
 
   if (mapped) {
     return mapped;
@@ -248,6 +254,12 @@ function normalizeKeyword(value) {
     .replace(/\s+/g, "-")
     .replace(/[♀]/g, "-f")
     .replace(/[♂]/g, "-m");
+}
+
+function normalizeJapaneseName(value) {
+  return value
+    .replace(/\s+/g, "")
+    .replace(/[ぁ-ゖ]/g, (char) => String.fromCharCode(char.charCodeAt(0) + 0x60));
 }
 
 async function calculateMatchup(typeNames) {

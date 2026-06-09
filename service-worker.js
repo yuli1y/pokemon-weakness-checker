@@ -1,8 +1,9 @@
-const CACHE_NAME = "pokemon-weakness-checker-v7";
+const CACHE_NAME = "pokemon-weakness-checker-v8";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
+  "./pokemon-names.js",
   "./script.js",
   "./manifest.json",
   "./icons/icon-192.svg",
