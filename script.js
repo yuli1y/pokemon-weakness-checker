@@ -203,13 +203,6 @@ form.addEventListener("submit", async (event) => {
   await searchPokemon(input.value);
 });
 
-document.querySelectorAll("[data-sample]").forEach((button) => {
-  button.addEventListener("click", async () => {
-    input.value = button.dataset.sample;
-    await searchPokemon(input.value);
-  });
-});
-
 async function searchPokemon(rawKeyword) {
   const keyword = normalizeKeyword(rawKeyword);
 
@@ -235,7 +228,7 @@ async function searchPokemon(rawKeyword) {
     console.error(error);
     pokemonCard.classList.add("hidden");
     emptyState.classList.remove("hidden");
-    setStatus("見つかりませんでした。英語名、図鑑番号、またはサンプル名で試してください。");
+    setStatus(getSearchErrorMessage(error));
   } finally {
     setLoading(false);
   }
@@ -359,6 +352,31 @@ function setLoading(isLoading) {
   input.disabled = isLoading;
 }
 
+function getSearchErrorMessage(error) {
+  if (!navigator.onLine || error instanceof TypeError) {
+    return "通信できないため検索できません。画面はオフラインでも開けますが、検索にはインターネット接続が必要です。";
+  }
+
+  return "見つかりませんでした。日本語名、英語名、または図鑑番号で試してください。";
+}
+
 function capitalize(value) {
   return value.charAt(0).toUpperCase() + value.slice(1).replace(/-/g, " ");
+}
+
+if ("serviceWorker" in navigator) {
+  document.documentElement.dataset.pwa = "checking";
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./service-worker.js")
+      .then(() => {
+        document.documentElement.dataset.pwa = "ready";
+      })
+      .catch((error) => {
+        document.documentElement.dataset.pwa = "failed";
+        console.error("Service worker registration failed:", error);
+      });
+  });
+} else {
+  document.documentElement.dataset.pwa = "unsupported";
 }

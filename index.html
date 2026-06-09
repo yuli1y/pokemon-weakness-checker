@@ -3,7 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#dc2626">
     <title>ポケモン弱点チェッカー</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.svg">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -33,13 +36,6 @@
             <button type="submit">調べる</button>
           </div>
         </form>
-
-        <div class="sample-row" aria-label="サンプル検索">
-          <button type="button" data-sample="ピカチュウ">ピカチュウ</button>
-          <button type="button" data-sample="リザードン">リザードン</button>
-          <button type="button" data-sample="フシギバナ">フシギバナ</button>
-          <button type="button" data-sample="ゲッコウガ">ゲッコウガ</button>
-        </div>
 
         <p class="status-text" id="statusText" role="status" aria-live="polite"></p>
       </section>

@@ -161,29 +161,9 @@ button:disabled {
   opacity: 0.68;
 }
 
-.sample-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 18px;
-}
-
-.sample-row button {
-  border: 1px solid var(--line);
-  padding: 8px 11px;
-  color: var(--ink);
-  background: #fff;
-  font-size: 0.9rem;
-}
-
-.sample-row button:hover {
-  border-color: #9ca3af;
-  background: #f8fafc;
-}
-
 .status-text {
   min-height: 1.5em;
-  margin: 22px 0 0;
+  margin: 18px 0 0;
   color: var(--muted);
   font-weight: 650;
 }
@@ -348,6 +328,10 @@ h3 {
     width: min(100% - 20px, 1120px);
   }
 
+  .search-pane {
+    padding: 22px 18px;
+  }
+
   .brand-row,
   .pokemon-main {
     grid-template-columns: 1fr;
@@ -355,6 +339,16 @@ h3 {
 
   .brand-row {
     display: grid;
+    gap: 12px;
+  }
+
+  .pokeball-mark {
+    width: 58px;
+  }
+
+  h1 {
+    font-size: clamp(1.35rem, 6vw, 1.55rem);
+    line-height: 1.18;
   }
 
   .input-row,
