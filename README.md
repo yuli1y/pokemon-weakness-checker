@@ -21,3 +21,18 @@
 3. リポジトリの `Settings` から `Pages` を開きます。
 4. `Deploy from a branch` を選び、`main` ブランチの `/root` を指定します。
 5. 表示されたURLを開きます。
+
+## PWA対応
+
+このアプリはPWA対応済みです。
+
+- ホーム画面に追加すると、アプリのように開けます。
+- アプリ画面はオフラインでも開けます。
+- ポケモン検索はPokéAPIへ通信するため、インターネット接続が必要です。
+
+GitHub Pagesへ反映するときは、次のファイルも忘れずにアップロードしてください。
+
+- `manifest.json`
+- `service-worker.js`
+- `icons/icon-192.svg`
+- `icons/icon-512.svg`
