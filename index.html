@@ -1,46 +1,110 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.6">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px 'Hiragino Mincho ProN'; -webkit-text-stroke: #000000; min-height: 18.0px}
-    p.p2 {margin: 0.0px 0.0px 12.0px 0.0px; font: 12.0px 'Hiragino Mincho ProN'; -webkit-text-stroke: #000000}
-    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px 'Hiragino Mincho ProN'; -webkit-text-stroke: #000000}
-    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px 'Hiragino Sans'; color: #000000; color: rgba(0, 0, 0, 0.85); -webkit-text-stroke: rgba(0, 0, 0, 0.85)}
-    p.p6 {margin: 0.0px 0.0px 12.0px 0.0px; font: 12.0px 'Hiragino Mincho ProN'; -webkit-text-stroke: #000000; min-height: 18.0px}
-    span.s1 {font-kerning: none}
-    span.s2 {font-kerning: none; background-color: #b3b3b3}
-  </style>
-</head>
-<body>
-<p class="p1"><span class="s1"></span><br></p>
-<p class="p2"><span class="s1">Type Matchup Tool</span></p>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px 'Hiragino Mincho ProN'; -webkit-text-stroke: #000000"><span class="s1"><b>ポケモン弱点チェッカー</b></span></h1>
-<p class="p4"><span class="s1">ポケモン名・英語名・図鑑番号</span></p>
-<p class="p1"><span class="s1"></span><br></p>
-<p class="p5"><span class="s2">調べる</span></p>
-<p class="p6"><span class="s1"></span><br></p>
-<p class="p4"><span class="s1">でんき じめん みず くさ</span></p>
-<p class="p2"><span class="s1">名前を入力すると、タイプと弱点が表示されます。</span></p>
-<p class="p6"><span class="s1"></span><br></p>
-<h2 style="margin: 0.0px 0.0px 14.9px 0.0px; font: 18.0px 'Hiragino Mincho ProN'; -webkit-text-stroke: #000000; min-height: 27.0px"><span class="s1"><b></b></span><br></h2>
-<p class="p1"><span class="s1"></span><br></p>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Hiragino Mincho ProN'; -webkit-text-stroke: #000000"><span class="s1"><b>弱点</b></span></h3>
-<p class="p1"><span class="s1"></span><br></p>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Hiragino Mincho ProN'; -webkit-text-stroke: #000000"><span class="s1"><b>耐性</b></span></h3>
-<p class="p1"><span class="s1"></span><br></p>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Hiragino Mincho ProN'; -webkit-text-stroke: #000000"><span class="s1"><b>無効</b></span></h3>
-<p class="p1"><span class="s1"></span><br></p>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Hiragino Mincho ProN'; -webkit-text-stroke: #000000"><span class="s1"><b>攻撃時の相性</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Hiragino Mincho ProN'; -webkit-text-stroke: #000000"><span class="s1"><b>効果ばつぐん</b></span></h3>
-<p class="p1"><span class="s1"></span><br></p>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Hiragino Mincho ProN'; -webkit-text-stroke: #000000"><span class="s1"><b>いまひとつ</b></span></h3>
-<p class="p1"><span class="s1"></span><br></p>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Hiragino Mincho ProN'; -webkit-text-stroke: #000000"><span class="s1"><b>効果なし</b></span></h3>
-<p class="p1"><span class="s1"></span><br></p>
-</body>
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#dc2626">
+    <title>ポケモン弱点チェッカー</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.svg">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="search-pane" aria-labelledby="app-title">
+        <div class="brand-row">
+          <div class="pokeball-mark" aria-hidden="true">
+            <span></span>
+          </div>
+          <div>
+            <p class="eyebrow">Type Matchup Tool</p>
+            <h1 id="app-title">ポケモン弱点チェッカー</h1>
+          </div>
+        </div>
+
+        <form class="search-form" id="searchForm">
+          <label for="pokemonInput">ポケモン名・英語名・図鑑番号</label>
+          <div class="input-row">
+            <div class="suggest-field">
+              <input
+                id="pokemonInput"
+                name="pokemon"
+                type="search"
+                autocomplete="off"
+                placeholder="例: ピカチュウ / pikachu / 25"
+                aria-autocomplete="list"
+                aria-controls="suggestionList"
+                aria-expanded="false"
+                required
+              >
+              <div class="suggestion-list hidden" id="suggestionList" role="listbox"></div>
+            </div>
+            <button type="submit">調べる</button>
+          </div>
+        </form>
+
+        <p class="status-text" id="statusText" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="result-pane" aria-live="polite">
+        <div class="empty-state" id="emptyState">
+          <div class="type-orbit" aria-hidden="true">
+            <span class="type-pill electric">でんき</span>
+            <span class="type-pill ground">じめん</span>
+            <span class="type-pill water">みず</span>
+            <span class="type-pill grass">くさ</span>
+          </div>
+          <p>名前を入力すると、タイプと弱点が表示されます。</p>
+        </div>
+
+        <article class="pokemon-card hidden" id="pokemonCard">
+          <div class="pokemon-main">
+            <img id="pokemonSprite" alt="" width="160" height="160">
+            <div>
+              <p class="dex-number" id="dexNumber"></p>
+              <h2 id="pokemonName"></h2>
+              <div class="chip-row" id="typeList" aria-label="タイプ"></div>
+            </div>
+          </div>
+
+          <div class="matchup-grid">
+            <section>
+              <h3>弱点</h3>
+              <div class="chip-row large" id="weaknessList"></div>
+            </section>
+            <section>
+              <h3>耐性</h3>
+              <div class="chip-row large" id="resistanceList"></div>
+            </section>
+            <section>
+              <h3>無効</h3>
+              <div class="chip-row large" id="immuneList"></div>
+            </section>
+          </div>
+
+          <div class="section-heading">
+            <h3>攻撃側の相性</h3>
+          </div>
+
+          <div class="matchup-grid attack-grid">
+            <section>
+              <h3>効果ばつぐん</h3>
+              <div class="chip-row large" id="attackStrongList"></div>
+            </section>
+            <section>
+              <h3>いまひとつ</h3>
+              <div class="chip-row large" id="attackWeakList"></div>
+            </section>
+            <section>
+              <h3>効果なし</h3>
+              <div class="chip-row large" id="attackNoEffectList"></div>
+            </section>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <script src="pokemon-names.js"></script>
+    <script src="script.js"></script>
+  </body>
 </html>
